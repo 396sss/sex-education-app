@@ -1,4 +1,4 @@
-# PHP 8.2 と Apache が入った公式のイメージを使います
+# 1行目は必ずこれだけにしてください（余計なFROMは消す）
 FROM php:8.2-apache
 
 # 必要なツール（unzipなど）をインストール
@@ -12,17 +12,17 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# ApacheのRewriteモジュールを有効にする（LaravelのURLを動かすのに必要）
+# ApacheのRewriteモジュールを有効にする
 RUN a2enmod rewrite
 
 # アプリのファイルをコピー
 COPY . /var/www/html
 
-# Composer（PHPの部品管理ツール）をインストール
+# Composerをインストールして実行
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
-# フォルダの権限設定
+# 権限の設定
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # ポートの設定
