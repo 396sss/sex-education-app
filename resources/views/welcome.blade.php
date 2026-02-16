@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>性教育チェックアプリ</title>
+    {{-- スマホで全画面表示にする設定 --}}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="性教育パパママ">
@@ -27,8 +28,14 @@
             border: 1px solid #eee;
         }
         
-        .title { font-weight: bold; font-size: 1.1em; color: #007bff; margin-bottom: 8px; }
+        .title { 
+            font-weight: bold; 
+            font-size: 1.1em; 
+            color: #007bff; 
+            margin-bottom: 8px;
+        }
 
+        /* ボタンを指で押しやすくする（スマホ最適化） */
         button {
             width: 100%;
             padding: 12px;
@@ -40,8 +47,10 @@
             border: none;
             margin-top: 10px;
         }
+        
         button:active { opacity: 0.7; }
 
+        /* 入力欄も大きく */
         input, textarea {
             font-size: 16px !important;
             width: 100%;
@@ -52,6 +61,7 @@
             margin-bottom: 10px;
         }
 
+        /* YouTube埋め込みのレスポンシブ設定 */
         .video-container {
             margin: 12px 0;
             position: relative;
@@ -62,50 +72,18 @@
         }
         .video-container iframe {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%; border: 0;
-        }
-
-        /* --- ここからアニメーションの魔法 --- */
-        
-        /* トロフィーが光って回る */
-        @keyframes shine-rotate {
-            0% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px gold); }
-            50% { transform: scale(1.2) rotate(10deg); filter: drop-shadow(0 0 20px gold); }
-            100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px gold); }
-        }
-        .trophy {
-            display: inline-block;
-            font-size: 4rem;
-            animation: shine-rotate 2s infinite ease-in-out;
-        }
-
-        /* 文字がぴょんぴょん跳ねる */
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-        .bounce-text {
-            display: inline-block;
-            animation: bounce 2s infinite;
-        }
-
-        /* キャラクターがひょっこり現れる */
-        @keyframes peek-a-boo {
-            0%, 100% { transform: translateY(50px); }
-            40%, 60% { transform: translateY(0); }
-        }
-        .character {
-            font-size: 3rem;
-            display: block;
-            margin-top: 10px;
-            animation: peek-a-boo 3s infinite ease-in-out;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
     </style>
 </head>
 <body>
     <h1>🔥 元体育教師パパの性教育トピック</h1>
 
+    {{-- 新規追加フォーム --}}
     <div class="card" style="background: #e3f2fd; border: 1px solid #90caf9;">
         <h3 style="margin-top: 0;">🆕 新しいトピックを追加</h3>
         <form action="/topics" method="POST">
@@ -113,20 +91,26 @@
             <input type="text" name="title" placeholder="トピックのタイトル" required>
             <textarea name="description" placeholder="詳しい説明をここに..." rows="3" required></textarea>
             <input type="url" name="youtube_url" placeholder="YouTubeのURL（あれば）">
-            <button type="submit" style="background: #007bff; color: white;">トピックを保存する</button>
+            
+            <button type="submit" style="background: #007bff; color: white;">
+                トピックを保存する
+            </button>
         </form>
     </div>
 
+    {{-- 未完了トピックの数を計算 --}}
     @php
         $pendingTopics = $topics->where('is_completed', false)->sortByDesc('created_at');
         $completedTopics = $topics->where('is_completed', true)->sortByDesc('updated_at');
     @endphp
 
+    {{-- 1. 未完了リスト --}}
     @if($pendingTopics->count() > 0)
         @foreach ($pendingTopics as $topic)
             <div class="card">
                 <div class="title">{{ $topic->title }}</div>
                 <p>{{ $topic->description }}</p>
+
                 @if($topic->youtube_url)
                     <div class="video-container">
                         @php
@@ -144,37 +128,48 @@
                         @endif
                     </div>
                 @endif
+                
                 <form action="/topics/{{ $topic->id }}/complete" method="POST">
                     @csrf
-                    <button type="submit" style="background: #28a745; color: white;">完了！</button>
+                    <button type="submit" style="background: #28a745; color: white;">
+                        完了！
+                    </button>
                 </form>
             </div>
         @endforeach
     @else
-        <div class="card" style="text-align: center; background: #fff3cd; border: 2px dashed #ffc107; padding: 40px 20px; overflow: hidden;">
-            <div class="trophy">🏆</div>
-            <h3 class="bounce-text" style="color: #856404; margin-bottom: 10px;">全トピック達成！</h3>
+        {{-- ★お祝いメッセージエリア（チーム・パパママ版）★ --}}
+        <div class="card" style="text-align: center; background: #fff3cd; border: 2px dashed #ffc107; padding: 40px 20px;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
+            <h3 style="color: #856404; margin-bottom: 10px;">全トピック達成！</h3>
             <p style="color: #856404;">
                 お疲れ様です！<br>
                 子供たちの未来を守る知識が、また一つ積み上がりましたね。<br>
                 <strong>最高のチーム・パパママです！</strong>
             </p>
-            <span class="character">😊✨</span>
         </div>
     @endif
 
+    {{-- 2. 完了済みリスト --}}
     <hr style="margin-top: 40px; border: 0; border-top: 1px solid #ccc;">
     <h2>✅ 完了したトピック</h2>
+
     @foreach ($completedTopics as $topic)
         <div class="card" style="opacity: 0.6; background: #e9ecef;">
             <div class="title" style="text-decoration: line-through; color: #666;">{{ $topic->title }}</div>
+            
             <form action="/topics/{{ $topic->id }}/restore" method="POST">
                 @csrf
-                <button type="submit" style="background: #6c757d; color: white;">やり直す</button>
+                <button type="submit" style="background: #6c757d; color: white;">
+                    やり直す（未完了に戻す）
+                </button>
             </form>
-            <form action="/topics/{{ $topic->id }}/delete" method="POST" onsubmit="return confirm('本当に削除しますか？');">
+
+            <form action="/topics/{{ $topic->id }}/delete" method="POST" onsubmit="return confirm('本当に削除してよろしいですか？');">
                 @csrf
-                <button type="submit" style="background: #dc3545; color: white;">完全に削除</button>
+                <button type="submit" style="background: #dc3545; color: white;">
+                    完全に削除する
+                </button>
             </form>
         </div>
     @endforeach
