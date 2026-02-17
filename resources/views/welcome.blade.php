@@ -81,7 +81,7 @@
     </style>
 </head>
 <body>
-    <h1>🔥 元体育教師パパの性教育トピック</h1>
+    <h1>🔥 元保健体育科教員パパの性教育トピック</h1>
 
     {{-- 新規追加フォーム --}}
     <div class="card" style="background: #e3f2fd; border: 1px solid #90caf9;">
