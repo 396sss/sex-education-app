@@ -22,6 +22,12 @@ COPY . /var/www/html
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
+# 空のデータベースファイルを作成する（これを追加！）
+RUN touch /var/www/html/database/database.sqlite
+
+# 既存のこの行の前に置いてください
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+
 # 権限の設定
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
