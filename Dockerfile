@@ -1,5 +1,5 @@
 # 1行目は必ずこれだけにしてください（余計なFROMは消す）
-FROM php:8.2-apache
+FROM php:8.4-apache
 
 # 必要なツール（unzipなど）をインストール
 RUN apt-get update && apt-get install -y \
