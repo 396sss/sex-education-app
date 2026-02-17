@@ -46,4 +46,9 @@ Route::post('/topics/{id}/delete', function ($id) {
     $topic->delete();
 
     return redirect('/');
+
+// 6. ゲーム画面を表示する
+Route::get('/game', function () {
+    return view('game');
 });
+});Route::get('/game', function () { return view('game'); });
