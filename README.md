@@ -6,10 +6,10 @@
 # 🔥 元保健体育科教員パパの性教育知育アプリ
 
 ## 🚀 デモサイト
-[こちらからアプリを触ってみることができます（Render）]((https://sex-education-app-1.onrender.com/))
+[🚀 こちらからアプリを触ってみることができます（Render）](https://sex-education-app-1.onrender.com/)
 
 ## 📸 アプリ画面イメージ
-![アプリのデモ画面](Users/396sss/Desktop/app-demo.png)
+![アプリのデモ画面](/Users/396sss/Desktop/app-demo.png)
 
 *親子で一緒に楽しく学べる画面設計にしています。*
 
