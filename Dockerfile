@@ -23,4 +23,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
+# データベースのテーブル（棚）を作成する
+RUN php artisan migrate --force
+
 EXPOSE 80
